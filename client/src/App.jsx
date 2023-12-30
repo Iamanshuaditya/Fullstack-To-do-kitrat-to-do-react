@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
@@ -91,7 +92,7 @@ export default function App() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/todos", {
+      const response = await fetch("http://localhost:3001/todos", {
         method: "GET",
       });
 
@@ -139,76 +140,100 @@ export default function App() {
     setEditing(null);
   };
 
-  const Todos = () => {
-    return (
-      <div className="pr-60 pl-60  ">
-        {tasks.map((todo) => (
-          <div
-            className="p-4 bg-[#ECEDF6] rounded-xl w-[60rem] mb-3"
-            key={todo._id}
-          >
-            <div className="h-18 w-[55rem] m-auto flex justify-between bg-white">
-              <div className="flex">
-                <Checkbox
-                  inputProps={{ "aria-label": "controlled" }}
-                  checked={checkedTasks[todo._id] || false}
-                  onChange={(e) => handleCheckboxChange(e, todo._id)}
-                />
-
-                <div>
-                  <p
-                    className={`font-medium text-[#585858] ${
-                      checkedTasks[todo._id] ? "line-through" : "normal"
-                    }`}
-                  >
-                    {isEditing === todo._id ? (
-                      <div>
-                        <BootstrapInput
-                          placeholder="Enter Your Task"
-                          id="bootstrap-input"
-                          className="m-auto w-100"
-                          ref={inputRef}
-                          value={inputValue}
-                          onChange={handleInputChange}
-                          onBlur={handleInputBlur}
-                        />
-
-                        <Button variant="contained" onClick={handleUpdateClick}>
-                          Update ToDo
-                        </Button>
-                      </div>
-                    ) : (
-                      <span>{todo.title}</span>
-                    )}
-                  </p>
-
-                  <p className="font-light text-[#585858] text-xs">
-                    {todo.createdAt} , {currentDate}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center m-2">
-                <MdDelete className="h-7 w-7 bg-[#EEEEEE] m-1 rounded-sm text-[#585858] p-1 cursor-pointer" />
-                <MdEdit
-                  className="h-7 w-7 bg-[#EEEEEE] m-1 rounded-sm text-[#585858] p-1 cursor-pointer"
-                  onClick={() => handleEditClick(todo._id)}
-                />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
   return (
     <>
       <h1 className="text-[40px] font-bold text-[#646681]  text-center ">
         To Do list
       </h1>
       <Input onSubmit={handleSumbit} />
-      <Todos />
+      <Todos
+        tasks={tasks}
+        checkedTasks={checkedTasks}
+        handleCheckboxChange={handleCheckboxChange}
+        isEditing={isEditing}
+        inputRef={inputRef}
+        inputValue={inputValue}
+        handleInputChange={handleInputChange}
+        handleInputBlur={handleInputBlur}
+        handleUpdateClick={handleUpdateClick}
+        handleEditClick={handleEditClick}
+        currentDate={currentDate}
+      />
     </>
   );
 }
 ("");
+
+const Todos = ({
+  tasks,
+  checkedTasks,
+  handleCheckboxChange,
+  isEditing,
+  inputRef,
+  inputValue,
+  handleInputChange,
+  handleInputBlur,
+  handleUpdateClick,
+  handleEditClick,
+  currentDate,
+}) => {
+  return (
+    <div className="pr-60 pl-60  ">
+      {tasks.map((todo) => (
+        <div
+          className="p-4 bg-[#ECEDF6] rounded-xl w-[60rem] mb-3"
+          key={todo._id}
+        >
+          <div className="h-18 w-[55rem] m-auto flex justify-between bg-white">
+            <div className="flex">
+              <Checkbox
+                inputProps={{ "aria-label": "controlled" }}
+                checked={checkedTasks[todo._id] || false}
+                onChange={(e) => handleCheckboxChange(e, todo._id)}
+              />
+
+              <div>
+                <p
+                  className={`font-medium text-[#585858] ${
+                    checkedTasks[todo._id] ? "line-through" : "normal"
+                  }`}
+                >
+                  {isEditing === todo._id ? (
+                    <div>
+                      <BootstrapInput
+                        placeholder="Enter Your Task"
+                        id="bootstrap-input"
+                        className="m-auto w-100"
+                        ref={inputRef}
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        onBlur={handleInputBlur}
+                      />
+
+                      <Button variant="contained" onClick={handleUpdateClick}>
+                        Update ToDo
+                      </Button>
+                    </div>
+                  ) : (
+                    <span>{todo.title}</span>
+                  )}
+                </p>
+
+                <p className="font-light text-[#585858] text-xs">
+                  {todo.createdAt} , {currentDate}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center m-2">
+              <MdDelete className="h-7 w-7 bg-[#EEEEEE] m-1 rounded-sm text-[#585858] p-1 cursor-pointer" />
+              <MdEdit
+                className="h-7 w-7 bg-[#EEEEEE] m-1 rounded-sm text-[#585858] p-1 cursor-pointer"
+                onClick={() => handleEditClick(todo._id)}
+              />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};

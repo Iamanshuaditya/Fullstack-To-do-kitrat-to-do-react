@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
-const port = 3000;
+const port = 3001;
 
 app.use(cors());
 app.use(express.json());
@@ -58,14 +58,12 @@ app.post("/todos", async (req, res) => {
   try {
     const newUser = new User({ title, status });
     await newUser.save();
-    res
-      .status(201)
-      .json({
-        message: "Todo Added",
-        title,
-        status,
-        createdAt: newUser.createdAt,
-      });
+    res.status(201).json({
+      message: "Todo Added",
+      title,
+      status,
+      createdAt: newUser.createdAt,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
